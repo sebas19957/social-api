@@ -1,3 +1,4 @@
 Red social:
 Entidades: Usuario, Publicación, Comentario, Amigo.
-Relaciones: Un usuario puede realizar varias publicaciones, una publicación puede tener varios comentarios, un usuario puede tener varios amigos.
+Relaciones: Un usuario puede realizar varias publicaciones, 
+una publicación puede tener varios comentarios, un usuario puede tener varios amigos.
