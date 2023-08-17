@@ -8,7 +8,7 @@ interface SeedDataFriends {
   friends: SeedFriends[];
 }
 
-export const initalDataUser: SeedDataFriends = {
+export const initalDataFriends: SeedDataFriends = {
   friends: [
     {
       id: '6c1756e3-5c54-4d0f-96e2-054cb947f7ea',
