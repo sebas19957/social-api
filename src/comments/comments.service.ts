@@ -47,7 +47,7 @@ export class CommentsService {
     });
 
     if (!user) {
-      throw new NotFoundException(`No exite ningún usuario con el id ${id}`);
+      throw new NotFoundException(`No exite ningún comentario con el id ${id}`);
     }
     return user;
   }
@@ -65,8 +65,16 @@ export class CommentsService {
     return user;
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} comment`;
+  async remove(id: string) {
+    try {
+      await this.commentRepository.delete(id);
+      return {
+        success: true,
+        message: 'Comentario eliminado exitosamente.',
+      };
+    } catch (error) {
+      this.handleDBExceptions(error);
+    }
   }
 
   private handleDBExceptions(error: any) {
