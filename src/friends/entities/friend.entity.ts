@@ -7,9 +7,9 @@ export class Friend {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column('uuid')
-  user_id_friend: string;
-
   @ManyToOne(() => User, (user) => user.friends)
   user: User;
+
+  @ManyToOne(() => User)
+  friend: User;
 }
