@@ -2,10 +2,15 @@ import { IsString, IsUUID } from 'class-validator';
 
 export class CreateCommentDto {
   @IsUUID(undefined, {
-    message: 'El campo publication_id debe ser un UUID válido',
+    message: 'El campo publication debe ser un UUID válido',
   })
-  publication_id: string;
+  publication: string;
 
-  @IsString({ message: 'El campo nombre debe ser una cadena de texto' })
+  @IsUUID(undefined, {
+    message: 'El campo user debe ser un UUID válido',
+  })
+  user: string;
+
+  @IsString({ message: 'El campo content debe ser una cadena de texto' })
   content: string;
 }
