@@ -12,6 +12,7 @@ import { CreatePublicationDto } from './dto/create-publication.dto';
 import { UpdatePublicationDto } from './dto/update-publication.dto';
 
 import { Publication } from './entities/publication.entity';
+import { plainToClass } from 'class-transformer';
 
 @Injectable()
 export class PublicationsService {
@@ -24,8 +25,12 @@ export class PublicationsService {
 
   async create(createPublicationDto: CreatePublicationDto) {
     try {
+      const publicationConverted = plainToClass(
+        Publication,
+        createPublicationDto,
+      );
       const publication =
-        this.publicationRepository.create(createPublicationDto);
+        this.publicationRepository.create(publicationConverted);
       await this.publicationRepository.save(publication);
 
       return publication;
@@ -35,37 +40,41 @@ export class PublicationsService {
   }
 
   async findAll() {
-    const users = await this.publicationRepository.find();
+    const publication = await this.publicationRepository.find();
     return {
-      results: users.length,
-      users,
+      results: publication.length,
+      publication,
     };
   }
 
   async findOne(id: string) {
-    const user = await this.publicationRepository.findOneBy({
+    const publication = await this.publicationRepository.findOneBy({
       id,
     });
 
-    if (!user) {
+    if (!publication) {
       throw new NotFoundException(
         `No exite ningúna publicación con el id ${id}`,
       );
     }
-    return user;
+    return publication;
   }
 
   async update(id: string, updatePublicationDto: UpdatePublicationDto) {
     await this.findOne(id);
 
-    const user = await this.publicationRepository.preload({
+    const publicationConverted = plainToClass(
+      Publication,
+      updatePublicationDto,
+    );
+    const publication = await this.publicationRepository.preload({
       id,
-      ...updatePublicationDto,
+      ...publicationConverted,
     });
 
-    await this.publicationRepository.save(user);
+    await this.publicationRepository.save(publication);
 
-    return user;
+    return publication;
   }
 
   async remove(id: string) {

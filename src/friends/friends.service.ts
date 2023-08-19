@@ -36,37 +36,37 @@ export class FriendsService {
   }
 
   async findAll() {
-    const users = await this.friendRepository.find();
+    const firends = await this.friendRepository.find();
     return {
-      results: users.length,
-      users,
+      results: firends.length,
+      firends,
     };
   }
 
   async findOne(id: string) {
-    const user = await this.friendRepository.findOneBy({
+    const friend = await this.friendRepository.findOneBy({
       id,
     });
 
-    if (!user) {
+    if (!friend) {
       throw new NotFoundException(`No exite ningúna amistad con el id ${id}`);
     }
-    return user;
+    return friend;
   }
 
   async update(id: string, updateFriendDto: UpdateFriendDto) {
     await this.findOne(id);
 
-    const friend = plainToClass(Friend, updateFriendDto);
+    const friendConverted = plainToClass(Friend, updateFriendDto);
 
-    const user = await this.friendRepository.preload({
+    const friend = await this.friendRepository.preload({
       id,
-      ...friend,
+      ...friendConverted,
     });
 
-    await this.friendRepository.save(user);
+    await this.friendRepository.save(friend);
 
-    return user;
+    return friend;
   }
 
   async remove(id: string) {

@@ -12,6 +12,7 @@ import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 
 import { Comment } from './entities/comment.entity';
+import { plainToClass } from 'class-transformer';
 
 @Injectable()
 export class CommentsService {
@@ -24,7 +25,8 @@ export class CommentsService {
 
   async create(createCommentDto: CreateCommentDto) {
     try {
-      const comment = this.commentRepository.create(createCommentDto);
+      const commentConverted = plainToClass(Comment, createCommentDto);
+      const comment = this.commentRepository.create(commentConverted);
       await this.commentRepository.save(comment);
 
       return comment;
@@ -42,27 +44,28 @@ export class CommentsService {
   }
 
   async findOne(id: string) {
-    const user = await this.commentRepository.findOneBy({
+    const comment = await this.commentRepository.findOneBy({
       id,
     });
 
-    if (!user) {
+    if (!comment) {
       throw new NotFoundException(`No exite ningún comentario con el id ${id}`);
     }
-    return user;
+    return comment;
   }
 
   async update(id: string, updateCommentDto: UpdateCommentDto) {
     await this.findOne(id);
 
-    const user = await this.commentRepository.preload({
+    const commentConverted = plainToClass(Comment, updateCommentDto);
+    const comment = await this.commentRepository.preload({
       id,
-      ...updateCommentDto,
+      ...commentConverted,
     });
 
-    await this.commentRepository.save(user);
+    await this.commentRepository.save(comment);
 
-    return user;
+    return comment;
   }
 
   async remove(id: string) {
