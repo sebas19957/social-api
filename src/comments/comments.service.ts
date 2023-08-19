@@ -1,26 +1,100 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 
+import { Comment } from './entities/comment.entity';
+import { plainToClass } from 'class-transformer';
+
 @Injectable()
 export class CommentsService {
-  create(createCommentDto: CreateCommentDto) {
-    return 'This action adds a new comment';
+  private readonly logger = new Logger('UsersService');
+
+  constructor(
+    @InjectRepository(Comment)
+    private readonly commentRepository: Repository<Comment>,
+  ) {}
+
+  async create(createCommentDto: CreateCommentDto) {
+    try {
+      const commentConverted = plainToClass(Comment, createCommentDto);
+      const comment = this.commentRepository.create(commentConverted);
+      await this.commentRepository.save(comment);
+
+      return comment;
+    } catch (error) {
+      this.handleDBExceptions(error);
+    }
   }
 
-  findAll() {
-    return `This action returns all comments`;
+  async findAll() {
+    const comment = await this.commentRepository.find();
+    return {
+      results: comment.length,
+      comment,
+    };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} comment`;
+  async findOne(id: string) {
+    const comment = await this.commentRepository.findOneBy({
+      id,
+    });
+
+    if (!comment) {
+      throw new NotFoundException(`No exite ningún comentario con el id ${id}`);
+    }
+    return comment;
   }
 
-  update(id: number, updateCommentDto: UpdateCommentDto) {
-    return `This action updates a #${id} comment`;
+  async update(id: string, updateCommentDto: UpdateCommentDto) {
+    await this.findOne(id);
+
+    const commentConverted = plainToClass(Comment, updateCommentDto);
+    const comment = await this.commentRepository.preload({
+      id,
+      ...commentConverted,
+    });
+
+    await this.commentRepository.save(comment);
+
+    return comment;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} comment`;
+  async remove(id: string) {
+    try {
+      await this.commentRepository.delete(id);
+      return {
+        success: true,
+        message: 'Comentario eliminado exitosamente.',
+      };
+    } catch (error) {
+      this.handleDBExceptions(error);
+    }
+  }
+
+  private handleDBExceptions(error: any) {
+    if (error.code === '23505') throw new BadRequestException(error.detail);
+    this.logger.error(error);
+    throw new InternalServerErrorException(
+      'Error no controlado, revisar los server logs',
+    );
+  }
+
+  async deleteAllUsers() {
+    const query = this.commentRepository.createQueryBuilder('comment');
+
+    try {
+      return await query.delete().where({}).execute();
+    } catch (error) {
+      this.handleDBExceptions(error);
+    }
   }
 }
