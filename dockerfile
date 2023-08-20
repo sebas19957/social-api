@@ -1,17 +1,23 @@
-# /app /usr /lib
-FROM node:19.2-alpine3.16
+# Establecer la imagen base con Node.js 18
+FROM node:18-alpine
 
-# cd app
+# Establecer el directorio de trabajo dentro del contenedor
 WORKDIR /app
 
-# Destino /app
-COPY package.json ./
+# Copiar los archivos de la aplicación al contenedor
+# COPY package*.json ./
 
-# Instalar las dependecias
+# Copiar el código fuente de la aplicación al contenedor
+COPY . .
+
+# Instalar las dependencias de la aplicación utilizando Yarn
 RUN yarn install
 
-# Expone el puerto en el que se ejecutará la API
-# EXPOSE 3005
+# Compilar la aplicación
+RUN yarn build
 
-# Define el comando para iniciar la aplicación
-CMD [ "yarn", "run", "start:dev" ]
+# Exponer el puerto en el que se ejecuta la aplicación
+EXPOSE 3006
+
+# Establecer el comando de inicio de la aplicación
+CMD [ "yarn", "start:prod" ]
