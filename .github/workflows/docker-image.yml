@@ -29,7 +29,7 @@ jobs:
 
       - name: Push Docker Image
         run: |
-          docker push sebasmval/social-api:1.0.9 .
+          docker push sebasmval/social-api:1.0.9
 
     # - name: Build the Docker image
     #   run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
