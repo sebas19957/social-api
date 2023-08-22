@@ -6,8 +6,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { Comment } from 'src/comments/entities/comment.entity';
-import { User } from 'src/users/entities/user.entity';
+import { Comment } from './../../comments/entities/comment.entity';
+import { User } from './../../users/entities/user.entity';
 
 @Entity()
 export class Publication {
