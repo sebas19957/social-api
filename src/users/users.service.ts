@@ -82,4 +82,14 @@ export class UsersService {
       'Error no controlado, revisar los server logs',
     );
   }
+
+  async deleteAllUsers() {
+    const query = this.userRepository.createQueryBuilder('user');
+
+    try {
+      return await query.delete().where({}).execute();
+    } catch (error) {
+      this.handleDBExceptions(error);
+    }
+  }
 }
