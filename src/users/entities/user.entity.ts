@@ -1,8 +1,8 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
-import { Publication } from 'src/publications/entities/publication.entity';
-import { Friend } from 'src/friends/entities/friend.entity';
-import { Comment } from 'src/comments/entities/comment.entity';
+import { Friend } from './../../friends/entities/friend.entity';
+import { Comment } from './../../comments/entities/comment.entity';
+import { Publication } from './../../publications/entities/publication.entity';
 
 @Entity()
 export class User {

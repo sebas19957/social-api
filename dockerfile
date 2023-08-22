@@ -4,14 +4,14 @@ FROM node:18-alpine
 # Establecer el directorio de trabajo dentro del contenedor
 WORKDIR /app
 
-# Copiar los archivos de la aplicación al contenedor
-# COPY package*.json ./
-
 # Copiar el código fuente de la aplicación al contenedor
 COPY . .
 
 # Instalar las dependencias de la aplicación utilizando Yarn
 RUN yarn install
+
+# Realizar pruebas
+RUN yarn test
 
 # Compilar la aplicación
 RUN yarn build
