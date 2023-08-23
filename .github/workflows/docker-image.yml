@@ -31,7 +31,6 @@ jobs:
           
         run: |
           echo "$DOCKER_PASSWORD" | docker login -u $DOCKER_USER --password-stdin
-          echo "NEW VERSION: $NEW_VERSION !!!!!!"
 
       - name: Build Docker Image
         env:
