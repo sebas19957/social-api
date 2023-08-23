@@ -61,8 +61,8 @@ describe('UsersService', () => {
     it('should return a user by ID', async () => {
       const userId = 'df9342c5-134b-4d43-af17-7aa56b5c6273';
       const user = new User();
-      jest.spyOn(userRepository, 'findOne').mockResolvedValue(user); //para que falle el test
-      // jest.spyOn(userRepository, 'findOneBy').mockResolvedValue(user);
+      // jest.spyOn(userRepository, 'findOne').mockResolvedValue(user); //para que falle el test
+      jest.spyOn(userRepository, 'findOneBy').mockResolvedValue(user);
 
       const result = await usersService.findOne(userId);
 
