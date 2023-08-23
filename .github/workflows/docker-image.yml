@@ -35,6 +35,7 @@ jobs:
           minor_pattern: 'feat'
           format: '${major}.${minor}.${patch}-prerelease'
         id: version
+        if: ${{ failure() }}
 
       - name: Docker Login
         env:
@@ -42,6 +43,7 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
           echo "$DOCKER_PASSWORD" | docker login -u $DOCKER_USER --password-stdin
+        if: ${{ failure() }}
 
       - name: Build Docker Image
         env:
@@ -57,3 +59,4 @@ jobs:
         run: |
           docker push sebasmval/social-api:$NEW_VERSION
           docker push sebasmval/social-api:latest
+        if: ${{ failure() }}
