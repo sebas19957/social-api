@@ -49,7 +49,7 @@ jobs:
         run: |
           docker build -t sebasmval/social-api:$NEW_VERSION .
           docker build -t sebasmval/social-api:latest .
-        if: ${{ failure() }}
+        # if: ${{ failure() }}
 
       - name: Push Docker Image
         env:
