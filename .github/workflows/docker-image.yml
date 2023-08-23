@@ -12,12 +12,12 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
       - name: Git Semantic Version
-        uses: PaulHatch/semantic-version@v3.1.1
+        uses: PaulHatch/semantic-version@v4.0.3
         with:
           major_pattern: 'major:'
           minor_pattern: 'feat'
@@ -28,17 +28,21 @@ jobs:
         env:
           DOCKER_USER: ${{ secrets.DOCKER_USER }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-          NEW_VERSION: ${{ steps.version.outputs.version }}
+          
         run: |
           echo "$DOCKER_PASSWORD" | docker login -u $DOCKER_USER --password-stdin
           echo "NEW VERSION: $NEW_VERSION !!!!!!"
 
-      # - name: Build Docker Image
-      #   run: |
-      #     docker build -t sebasmval/social-api:1.0.9 .
-      #     docker build -t sebasmval/social-api:latest .
+      - name: Build Docker Image
+        env:
+          NEW_VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          docker build -t sebasmval/social-api:$NEW_VERSION.
+          docker build -t sebasmval/social-api:latest .
 
-      # - name: Push Docker Image
-      #   run: |
-      #     docker push sebasmval/social-api:1.0.9
-      #     docker push sebasmval/social-api:latest
+      - name: Push Docker Image
+        env:
+          NEW_VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          docker push sebasmval/social-api:$NEW_VERSION
+          docker push sebasmval/social-api:latest
