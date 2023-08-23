@@ -37,7 +37,7 @@ jobs:
         env:
           NEW_VERSION: ${{ steps.version.outputs.version }}
         run: |
-          docker build -t sebasmval/social-api:$NEW_VERSION.
+          docker build -t sebasmval/social-api:$NEW_VERSION .
           docker build -t sebasmval/social-api:latest .
 
       - name: Push Docker Image
