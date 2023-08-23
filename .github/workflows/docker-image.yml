@@ -1,41 +1,27 @@
 name: Docker Image CI
-
 on:
   push:
     branches: ['main']
   pull_request:
     branches: ['main']
-
 jobs:
-  test:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-
-      - name: Install Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run tests
-        run: npm test
-
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-
+      - name: Set up Node.js 18
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18
+      - name: Install dependencies
+        run: npm ci
+      - name: Run Tests
+        run: |
+          npm run test
+        if: ${{ failure() }}
       - name: Git Semantic Version
         uses: PaulHatch/semantic-version@v5.2.0
         with:
@@ -43,22 +29,18 @@ jobs:
           minor_pattern: 'feat'
           format: '${major}.${minor}.${patch}-prerelease'
         id: version
-
       - name: Docker Login
         env:
           DOCKER_USER: ${{ secrets.DOCKER_USER }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-          
         run: |
           echo "$DOCKER_PASSWORD" | docker login -u $DOCKER_USER --password-stdin
-
       - name: Build Docker Image
         env:
           NEW_VERSION: ${{ steps.version.outputs.version }}
         run: |
           docker build -t sebasmval/social-api:$NEW_VERSION .
           docker build -t sebasmval/social-api:latest .
-
       - name: Push Docker Image
         env:
           NEW_VERSION: ${{ steps.version.outputs.version }}
