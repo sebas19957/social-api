@@ -49,19 +49,19 @@ jobs:
 
         run: |
           docker build -t sebasmval/social-api:$NEW_VERSION \
-            --build-arg DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
-            --build-arg DB_NAME=${{ secrets.DB_NAME }} \
-            --build-arg DB_HOST=${{ secrets.DB_HOST }} \
-            --build-arg DB_PORT=${{ secrets.DB_PORT }} \
-            --build-arg DB_USERNAME=${{ secrets.DB_USERNAME }} \
+            --build-arg DB_PASSWORD_ENV=${{ secrets.DB_PASSWORD }} \
+            --build-arg DB_NAME_ENV=${{ secrets.DB_NAME }} \
+            --build-arg DB_HOST_ENV=${{ secrets.DB_HOST }} \
+            --build-arg DB_PORT_ENV=${{ secrets.DB_PORT }} \
+            --build-arg DB_USERNAME_ENV=${{ secrets.DB_USERNAME }} \
             .
 
           docker build -t sebasmval/social-api:latest \
-            --build-arg DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
-            --build-arg DB_NAME=${{ secrets.DB_NAME }} \
-            --build-arg DB_HOST=${{ secrets.DB_HOST }} \
-            --build-arg DB_PORT=${{ secrets.DB_PORT }} \
-            --build-arg DB_USERNAME=${{ secrets.DB_USERNAME }} \
+            --build-arg DB_PASSWORD_ENV=${{ secrets.DB_PASSWORD }} \
+            --build-arg DB_NAME_ENV=${{ secrets.DB_NAME }} \
+            --build-arg DB_HOST_ENV=${{ secrets.DB_HOST }} \
+            --build-arg DB_PORT_ENV=${{ secrets.DB_PORT }} \
+            --build-arg DB_USERNAME_ENV=${{ secrets.DB_USERNAME }} \
             .
         # if: ${{ failure() }}
 
