@@ -28,13 +28,14 @@ jobs:
         run: |
           yarn test
 
-      # - name: Git Semantic Version
-      #   uses: PaulHatch/semantic-version@v5.2.0
-      #   with:
-      #     major_pattern: 'major:'
-      #     minor_pattern: 'feat'
-      #     format: '${major}.${minor}.${patch}-prerelease'
-      #   id: version
+      - name: Git Semantic Version
+        uses: PaulHatch/semantic-version@v5.2.0
+        with:
+          major_pattern: 'major:'
+          minor_pattern: 'feat'
+          format: '${major}.${minor}.${patch}-prerelease'
+        if: ${{ failure() }}
+        id: version
 
       # - name: Docker Login
       #   env:
