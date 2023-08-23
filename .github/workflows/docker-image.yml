@@ -27,7 +27,6 @@ jobs:
       - name: Run Tests
         run: |
           yarn test
-        if: ${{ failure() }}
         
       - name: Git Semantic Version
         uses: PaulHatch/semantic-version@v5.2.0
