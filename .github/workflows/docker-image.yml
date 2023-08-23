@@ -46,11 +46,7 @@ jobs:
       - name: Build Docker Image
         env:
           NEW_VERSION: ${{ steps.version.outputs.version }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DB_HOST: ${{ secrets.DB_HOST }}
-          DB_PORT: ${{ secrets.DB_PORT }}
-          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+
         run: |
           docker build -t sebasmval/social-api:$NEW_VERSION \
             --build-arg DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
@@ -61,12 +57,12 @@ jobs:
             .
 
           docker build -t sebasmval/social-api:latest \
-          --build-arg DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
-          --build-arg DB_NAME=${{ secrets.DB_NAME }} \
-          --build-arg DB_HOST=${{ secrets.DB_HOST }} \
-          --build-arg DB_PORT=${{ secrets.DB_PORT }} \
-          --build-arg DB_USERNAME=${{ secrets.DB_USERNAME }} \
-          .
+            --build-arg DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+            --build-arg DB_NAME=${{ secrets.DB_NAME }} \
+            --build-arg DB_HOST=${{ secrets.DB_HOST }} \
+            --build-arg DB_PORT=${{ secrets.DB_PORT }} \
+            --build-arg DB_USERNAME=${{ secrets.DB_USERNAME }} \
+            .
         # if: ${{ failure() }}
 
       - name: Push Docker Image
