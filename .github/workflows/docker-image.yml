@@ -63,7 +63,7 @@ jobs:
             --build-arg DB_PORT_ENV=${{ secrets.DB_PORT }} \
             --build-arg DB_USERNAME_ENV=${{ secrets.DB_USERNAME }} \
             .
-        # if: ${{ failure() }}
+        # if: ${{ failure() }} 
 
       - name: Push Docker Image
         env:
