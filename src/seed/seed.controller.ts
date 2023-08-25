@@ -9,4 +9,11 @@ export class SeedController {
   executeSeed() {
     return this.seedService.runSeed();
   }
+
+  @Get('world')
+  getWorld() {
+    return {
+      world: 'Hello',
+    };
+  }
 }
