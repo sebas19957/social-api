@@ -28,6 +28,12 @@ jobs:
         run: |
           yarn test
 
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
       - name: Git Semantic Version
         uses: PaulHatch/semantic-version@v5.2.0
         with:
@@ -63,7 +69,7 @@ jobs:
             --build-arg DB_PORT_ENV=${{ secrets.DB_PORT }} \
             --build-arg DB_USERNAME_ENV=${{ secrets.DB_USERNAME }} \
             .
-        # if: ${{ failure() }} 
+        # if: ${{ failure() }}
 
       - name: Push Docker Image
         env:
