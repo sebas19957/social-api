@@ -78,7 +78,8 @@ jobs:
           docker push sebasmval/social-api:$NEW_VERSION
           docker push sebasmval/social-api:latest
 
-   sonarcloud:
+jobs:
+  sonarcloud:
     name: SonarCloud
     runs-on: ubuntu-latest
     steps:
