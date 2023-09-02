@@ -1,17 +1,17 @@
 name: Docker Image CI
+
 on:
   push:
     branches: ['main']
   pull_request:
     branches: ['main']
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+        uses: actions/checkout@v2 # Actualizado a v2
 
       - name: Set up Node.js 18
         uses: actions/setup-node@v2
@@ -25,14 +25,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Run Tests
-        run: |
-          yarn test
-
-      # - name: SonarCloud Scan
-      #   uses: sonarsource/sonarcloud-github-action@master
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: yarn test
 
       - name: Git Semantic Version
         uses: PaulHatch/semantic-version@v5.2.0
@@ -52,7 +45,6 @@ jobs:
       - name: Build Docker Image
         env:
           NEW_VERSION: ${{ steps.version.outputs.version }}
-
         run: |
           docker build -t sebasmval/social-api:$NEW_VERSION \
             --build-arg DB_PASSWORD_ENV=${{ secrets.DB_PASSWORD }} \
@@ -69,7 +61,6 @@ jobs:
             --build-arg DB_PORT_ENV=${{ secrets.DB_PORT }} \
             --build-arg DB_USERNAME_ENV=${{ secrets.DB_USERNAME }} \
             .
-        # if: ${{ failure() }}
 
       - name: Push Docker Image
         env:
@@ -78,18 +69,21 @@ jobs:
           docker push sebasmval/social-api:$NEW_VERSION
           docker push sebasmval/social-api:latest
 
-jobs:
   sonarcloud:
     name: SonarCloud
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
         with:
-          fetch-depth: 0 
+          fetch-depth: 0
+
       - name: Install dependencies
         run: yarn
+
       - name: Test and coverage
         run: yarn jest --coverage
+
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
