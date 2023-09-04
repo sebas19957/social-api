@@ -36,16 +36,18 @@ export class FriendsService {
   }
 
   async findAll() {
-    const firends = await this.friendRepository.find();
+    const friends = await this.friendRepository.find();
     return {
-      results: firends.length,
-      firends,
+      results: friends.length,
+      friends,
     };
   }
 
   async findOne(id: string) {
-    const friend = await this.friendRepository.findOneBy({
-      id,
+    const friend = await this.friendRepository.findOne({
+      where: {
+        id,
+      },
     });
 
     if (!friend) {

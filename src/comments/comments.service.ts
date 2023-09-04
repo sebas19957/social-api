@@ -36,16 +36,18 @@ export class CommentsService {
   }
 
   async findAll() {
-    const comment = await this.commentRepository.find();
+    const comments = await this.commentRepository.find();
     return {
-      results: comment.length,
-      comment,
+      results: comments.length,
+      comments,
     };
   }
 
   async findOne(id: string) {
-    const comment = await this.commentRepository.findOneBy({
-      id,
+    const comment = await this.commentRepository.findOne({
+      where: {
+        id,
+      },
     });
 
     if (!comment) {
