@@ -62,7 +62,7 @@ jobs:
             --build-arg DB_USERNAME_ENV=${{ secrets.DB_USERNAME }} \
             .
 
-      - name: Push Docker Image
+      - name: Push Docker Image s
         env:
           NEW_VERSION: ${{ steps.version.outputs.version }}
         run: |
